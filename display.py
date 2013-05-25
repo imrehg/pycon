@@ -7,6 +7,7 @@ import time
 import datetime
 import urllib2
 import simplejson
+import socket
 
 class LCD:
     """ SparkFun SerLCD 2.5 module, serial communication """
@@ -70,7 +71,12 @@ while True:
     timestr = now.strftime("%H:%M:%S")
     lcd.pos(0, 0)
     lcd.write("TPEHACK "+timestr);
-    likes = getLikes()
+
+    try:
+        likes = getLikes()
+    except socket.error:
+        print "Socket error... (network gotcha)"
+
     lcd.pos(1, 0)
     lcd.write("Like count: "+str(likes));
     time.sleep(2)
